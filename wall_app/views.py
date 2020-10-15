@@ -10,7 +10,7 @@ def index(request):
 def wall (request):
     context = {
         'user': User.objects.get(id=request.session['user_id']),
-    #request.sesssion, request.POST
+    #request.sesssion, not request.POST
         'posts':Post.objects.all()
     }
     return render (request, 'wall.html', context)
