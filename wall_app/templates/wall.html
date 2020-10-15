@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Index</title>
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+      <script src="{% static 'js/script.js' %}"></script>
+    </head>
+    <body>
+     <h3>CodingDojo Wall</h3>
+     <p>Welcome {{user.first_name}}</p>
+     <a href="/logout">Logout</a>
+     <br>
+     <form action="/add_post" method="POST">
+        <p>Post a message</p>
+        {% csrf_token %}
+        <input type="hidden" name="user_id" />
+        <input type="text" name="post" />
+        <button type="submit">Post a message</button>
+      </form>
+     <!--When you want to link a post to a User, use one to many
+         relationship in models.py-->
+      <ul>
+          {% for post in posts %}
+          <li>
+              <p>{{post.user.first_name}} - {{post.created_at}}</p>
+              <p>{{post.post}}</p>
+          </li>
+        <!--very import and easy to forget!!!!-->  
+            {% for comment in post.comments.all %} <!--This grabs all of the comments for this specific comment -->
+            {{comment.user.first_name}} {{comment.user.last_name}} {{comment.created_at}}
+            <p>{{comment.comment}}</p>
+            {% endfor %}
+          
+            <form action="/post_comment/{{post.id}}" method="POST">
+                <p>Post a comment</p>
+                {% csrf_token %}
+                <input type="text" name="comment" />
+                <button type = 'submit'>comment</button>
+            </form>
+          {% endfor %}
+      </ul>
+  
+    </body>   
+   </html>
+
